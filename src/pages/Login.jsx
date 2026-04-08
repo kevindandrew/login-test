@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/useAuth'
 export default function Login() {
+    const { login } = useAuth()
     const [form, setForm] = useState({ email: "", password: "" })
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -29,18 +31,14 @@ export default function Login() {
                 console.log(error)
                 return
             }
-
-
             console.log(data)
-            localStorage.setItem("token", data.access_token)
-            localStorage.setItem("username", data.user_name)
-            localStorage.setItem("user_rol", data.user_role)
-            if (data.user_role==="admin") {
+            login(data)
+            if (data.user_role === "admin") {
                 navigate("/")
-            }else{
+            } else {
                 navigate("/cliente")
             }
-            
+
         } catch (error) {
             console.log(error)
         }

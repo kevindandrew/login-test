@@ -4,24 +4,22 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import ClienteHome from './pages/ClienteHome'
+import { useAuth } from './context/useAuth'
 export default function App() {
-
+  const {user}=useAuth()
   function PrivateRouteCliente({ children }) {
-    const token = localStorage.getItem("token")
-    const rol = localStorage.getItem("user_rol")
-    if (!token) {
+
+    if (!user.token) {
       return <Navigate to="/Login"></Navigate>
     }
-    return rol === "admin" ? <Navigate to="/"></Navigate> : children
+    return user.rol === "admin" ? <Navigate to="/"></Navigate> : children
 
   }
   function PrivateRouteAdministrador({ children }) {
-    const token = localStorage.getItem("token")
-    const rol = localStorage.getItem("user_rol")
-    if (!token) {
+    if (!user.token) {
       return <Navigate to="/Login"></Navigate>
     }
-    return rol === "cliente" ? <Navigate to="/cliente"></Navigate> : children
+    return user.rol === "cliente" ? <Navigate to="/cliente"></Navigate> : children
   }
   return (
     <>
